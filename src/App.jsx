@@ -1,7 +1,8 @@
+import { useState } from "react";
 import Expenses from "./components/Expenses/Expenses";
 import NewExpense from "./components/NewExpense/NewExpense";
 
-const expenses = [
+const DUMMY_EXPENSES = [
   {
     id: 'e1',
     title: 'Toilet Paper',
@@ -25,13 +26,13 @@ const expenses = [
     id: 'e5',
     title: 'Dog Food',
     amount: 450,
-    date: new Date(2023, 5, 12),
+    date: new Date(2022, 5, 12),
   },
 ];
 
 const App = () => {
 
-  // const [expenses, setExpenses] = useState([test]);
+  const [expenses, setExpenses] = useState(DUMMY_EXPENSES);
 
   // under the hood, this is what React is doing:
   // return React.createElement(  
@@ -41,16 +42,14 @@ const App = () => {
   // );
 
   const addExpenseHandler = (expense) => {
-    console.log('In App.js');
-    console.log(expense);
-    // setExpenses(expenses.push(expense));
-    // console.log(expenses);
+    // remember this!!! 
+    setExpenses(prevExpenses => [expense, ...prevExpenses]);
   };
 
   return (
     <div>
       <NewExpense onAddExpense={addExpenseHandler} />
-      <Expenses expenses={expenses} />
+      <Expenses items={expenses} />
     </div>
   )
 }

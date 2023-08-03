@@ -23,3 +23,7 @@ const ExpensesFilter = ({ onFilterChange, selected }) => {
 };
 
 export default ExpensesFilter;
+
+// some theory:
+// two-way binding; controlled component -> all the logic is in the parent, in Expenses, and the parent passes that logic to the child via props
+// the value as well as changes to the value are not handled in the component itself but in the parent component 

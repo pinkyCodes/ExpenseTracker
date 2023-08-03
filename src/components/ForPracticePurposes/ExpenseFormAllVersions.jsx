@@ -2,13 +2,35 @@
 import './ExpenseForm.css';
 import { useState } from 'react';
 
-const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
+const ExpenseForm = ({ onSaveExpenseData }) => {
+    // multiple states
     const [enteredTitle, setEnteredTitle] = useState('');
     const [enteredAmount, setEnteredAmount] = useState(''); //string bc the event.target.value is always a string!!!
     const [enteredDate, setEnteredDate] = useState('');
 
+    // single state object
+    // const [userInput, setUserInput] = useState({
+    //     enteredTitle: '',
+    //     enteredAmount: '',
+    //     enteredDate: '',
+    // });
+
     const titleChangeHandler = (event) => {
         setEnteredTitle(event.target.value);
+
+        // the code below is NOT good practice!  
+        // setUserInput({
+        //     ...userInput, // keeping the other two properties when depending on previous state
+        //     enteredTitle: event.target.value,
+        // });
+
+        // React schedules state updates, they're not performed instantly; theoretically, if we schedule a lot of state updates at the 
+        // same time, we could be depending on an outdated state snapshot
+        // this version is better since React will guarantee that we depend on the latest state snapshot
+        // NB! if your state update depends on previous state, use the function syntax
+        // setUserInput((prevState) => {
+        //     return { ...prevState, enteredTitle: event.target.value };
+        // });
     };
 
     const amountChangeHandler = (event) => {
@@ -19,8 +41,22 @@ const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
         setEnteredDate(event.target.value);
     };
 
+    // shared handler func - alternative to the separate handler funcs
+    // const inputHandler = (id, value) => {
+    //     if (id === 'title') {
+    //         setEnteredTitle(value);
+    //     } else if (id === 'amount') {
+    //         setEnteredAmount(value);
+    //     } else {
+    //         setEnteredDate(value);
+    //     }
+    // };
+
     const submitHandler = (event) => {
         event.preventDefault();
+        // call this on the event obj to prevent the form's default behaviour - to reload the page when submitted
+        // this happens bc the client sends a request to the server (in our case the dev server) whenever a form is submitted
+        // with the preventDefault() method nothing is sent anywhere and we handle the behaviour manually, as we wish
 
         const expenseData = {
             title: enteredTitle,
@@ -47,6 +83,9 @@ const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
                         value={enteredTitle} // two way binding -> force the input's value to match the state variable...
                         onChange={titleChangeHandler} // ... and update the state variable on any edits!
                     />
+
+                    {/* for the shared handler fun */}
+                    {/* <input type='text' onChange={(event) => inputHandler('title', event.target.value)} /> */}
                 </div>
 
                 <div className='new-expense__control'>
@@ -73,7 +112,7 @@ const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
             </div>
 
             <div className='new-expense__actions'>
-                <button type='button' onClick={onCancel}>Cancel</button>
+                <button>Cancel</button>
                 <button type='submit'>Add Expense</button>
             </div>
 
@@ -81,4 +120,5 @@ const ExpenseForm = ({ onSaveExpenseData, onCancel }) => {
     );
 };
 
-export default ExpenseForm;
+// extra info on forms -> https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable
+// useDeferredValue() -> for optimization 

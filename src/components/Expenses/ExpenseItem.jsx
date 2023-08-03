@@ -1,20 +1,27 @@
 /* eslint-disable react/prop-types */
-import './ExpenseItem.css'
+import { useState } from 'react';
+import Card from '../UI/Card';
 import ExpenseDate from './ExpenseDate';
-import Card from '../UI/Card'
+import './ExpenseItem.css';
 
-const ExpenseItem = ({ expense }) => {
+const ExpenseItem = ({ item }) => {
+    const [title, setTitle] = useState(item.title); // this is basically arr destructuring; also, using const is fine bc we change the value with the set func, not with the = operator
 
+    const clickHandler = () => {
+        setTitle('Updated');
+        // console.log(title); // this still shows the old value because useState schedules a re-render but first the rest of the code must be executed
+    };
 
     return (
         <Card className='expense-item'>
-            
-            <ExpenseDate date={expense.date} />
+
+            <ExpenseDate date={item.date} />
 
             <div className='expense-item__description'>
-                <h2>{expense.title}</h2>
-                <div className='expense-item__price'>${expense.amount}</div>
+                <h2>{title}</h2>
+                <div className='expense-item__price'>${item.amount}</div>
             </div>
+            <button onClick={clickHandler}>Change Title</button>
         </Card>
     )
 };

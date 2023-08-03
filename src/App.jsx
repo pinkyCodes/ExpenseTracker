@@ -1,4 +1,5 @@
 import Expenses from "./components/Expenses/Expenses";
+import NewExpense from "./components/NewExpense/NewExpense";
 
 const expenses = [
   {
@@ -30,15 +31,25 @@ const expenses = [
 
 const App = () => {
 
+  // const [expenses, setExpenses] = useState([test]);
+
   // under the hood, this is what React is doing:
-  // return React.createElement(
+  // return React.createElement(  
   //   'div',
   //   {},
   //   React.createElement(Expenses, { items: expenses })
   // );
 
+  const addExpenseHandler = (expense) => {
+    console.log('In App.js');
+    console.log(expense);
+    // setExpenses(expenses.push(expense));
+    // console.log(expenses);
+  };
+
   return (
     <div>
+      <NewExpense onAddExpense={addExpenseHandler} />
       <Expenses expenses={expenses} />
     </div>
   )
